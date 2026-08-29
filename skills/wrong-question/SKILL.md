@@ -1,3 +1,9 @@
+---
+name: wrong-question
+description: Validate and route explicitly requested wrong-question records through the isolated OpenClaw runtime boundary.
+user-invocable: false
+---
+
 # Wrong Question Skill v1
 
 ## Purpose
@@ -21,6 +27,10 @@
 `parseWrongQuestion()` 返回 `ValidatedWrongQuestion`（含 `chapterId`、`chapterNumber`、`questionId`）；`buildWrongQuestionWritePlan()` 再生成 `targetPath`、确定性 Markdown 和可选附件引用。Markdown 包含稳定 frontmatter、题目、我的错误、错误原因、正确思路、关键点和分类段落。未知 top-level 字段会被忽略，只有明确允许字段进入 validated object。
 
 `questionId` 格式为 `WQ-HM01-XXXXXXXXXXXX` 或 `WQ-LA01-XXXXXXXXXXXX`，由 subject、chapterId 和简单空白归一化后的 question 计算 SHA-256 前 12 位大写十六进制。它是稳定短 identity，不声称数学绝对唯一；顺序显示编号仍 deferred。
+
+## N1 runtime hand-off
+
+在 N1 运行时，OpenClaw 负责会话、模型和 MCP 编排；本 Skill 只消费模型提供的结构化字段，调用 domain parser/validator，再生成 `WrongQuestionWritePlan`。FNS 写入必须由已注册的原生 MCP 工具执行，且仅允许用户明确授权的 `Migration-Test/` smoke 目标。Skill 不直接发 HTTP 请求、不读取凭据，也不把 `questionId`、Vault 路径或“我的错误”交给模型自由生成。
 
 ## Safety expectations
 
