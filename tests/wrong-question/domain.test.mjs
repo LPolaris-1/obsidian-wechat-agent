@@ -144,6 +144,16 @@ test("inconsistent chapter identity fields fail", () => {
   assert.throws(() => resolveChapter("高数", { chapterId: "high-math-05", chapter: "二重积分" }), /不一致/);
 });
 
+test("duplicate display names must agree with chapterId and chapterNumber", () => {
+  assert.equal(parseWrongQuestion({ ...validHigh, chapterId: "high-math-05", chapter: "应用(一)几何应用" }).chapterId, "high-math-05");
+  assert.equal(parseWrongQuestion({ ...validHigh, chapterId: "high-math-10", chapter: "应用(一)几何应用" }).chapterId, "high-math-10");
+  assert.equal(parseWrongQuestion({ ...validHigh, chapterId: undefined, chapterNumber: 5, chapter: "应用(一)几何应用" }).chapterId, "high-math-05");
+  assert.throws(() => parseWrongQuestion({ ...validHigh, chapterId: "high-math-01", chapter: "应用(一)几何应用" }), /章节字段不一致/);
+  assert.throws(() => parseWrongQuestion({ ...validHigh, chapterId: undefined, chapterNumber: 1, chapter: "应用(一)几何应用" }), /章节字段不一致/);
+  assert.throws(() => parseWrongQuestion({ ...validHigh, chapterId: "high-math-05", chapterNumber: 10, chapter: "应用(一)几何应用" }), /章节字段不一致/);
+  assert.throws(() => parseWrongQuestion({ ...validHigh, chapter: "应用(一)几何应用", chapterId: undefined, chapterNumber: undefined }), /AMBIGUOUS CHAPTER/);
+});
+
 test("filename identity prevents topic/type collisions", () => {
   const a = parseWrongQuestion(validHigh);
   const b = parseWrongQuestion({ ...validHigh, question: "另一道完全不同的虚构题目" });

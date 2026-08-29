@@ -61,6 +61,9 @@ export function resolveChapter(subject: Subject, input: ChapterResolutionInput):
     throw new Error("必须提供 chapterId、chapterNumber 或 chapter");
   }
   const ids = new Set(candidates.map((item) => item.id));
-  if (ids.size !== 1 || (byName.length > 1 && !byId && !byNumber)) throw new Error(byName.length > 1 ? "AMBIGUOUS CHAPTER" : "章节字段不一致");
-  return candidates[0];
+  if (ids.size !== 1) throw new Error("章节字段不一致");
+  if (byName.length > 1 && !byId && !byNumber) throw new Error("AMBIGUOUS CHAPTER");
+  const resolved = candidates[0];
+  if (input.chapter !== undefined && !byName.some((item) => item.id === resolved.id)) throw new Error("章节字段不一致");
+  return resolved;
 }
