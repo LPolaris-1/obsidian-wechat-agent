@@ -14,9 +14,11 @@ The runtime preparation on 2026-08-29 found:
 - DeepSeek provider `deepseek/deepseek-v4-flash-vision-exp` was configured with an environment-backed key. Text smoke returned `N1_TEXT_OK`.
 - A synthetic PNG smoke required exactly one `image` tool call and returned `x^2 + 1 = 0`; no real image or Vault content was used.
 - The official FNS service is reachable on the existing server at `http://127.0.0.1:9000/api/mcp` (normally exposed to the workstation through an SSH tunnel). The discovered vault name is `defaultVault`.
-- The existing `FNS_TOKEN` is present but has REST/WS scope only. FNS MCP initialization returns `Permission denied: /api/mcp`; no MCP tool list was accepted as discovered.
+- A newly supplied, valid FNS token is scoped `p:rest,ws,mcp` for the `openclaw` client. Native OpenClaw `streamable-http` MCP initialization succeeded and discovered 26 server tools.
+- The isolated agent allowlist exposed only `image`, `fns__note_create_or_update` and `fns__note_get`. All destructive/file/vault tools were unavailable to the model.
+- Text E2E created `Migration-Test/N1-Text-Smoke.md`, then read the exact path back successfully. Image E2E read the synthetic PNG, created `Migration-Test/N1-Image-Smoke.md`, then read the exact path back successfully.
 
-Therefore N1 real integration is **BLOCKED at native FNS MCP authorization**, not at OpenClaw or DeepSeek model execution. No REST client, custom MCP adapter, production write, or Vault write was introduced.
+Therefore N1 real integration is **PASS for the bounded smoke scope**. No REST client, custom MCP adapter, production write, or formal Vault write was introduced.
 
 ## Required order when the runtime is available
 
@@ -31,5 +33,6 @@ Therefore N1 real integration is **BLOCKED at native FNS MCP authorization**, no
 ## Failure rules
 
 - Missing executable, model key, FNS endpoint/token/scope or unverified tool names means BLOCKED, not PASS.
+- A successful smoke must include tool-call evidence and exact-path read-back; a model-only claim is insufficient.
 - A failed validation or failed read-back must not trigger a write to an alternate path.
 - Real integration remains manual and is excluded from CI. CI only runs the offline TypeScript tests and syntax/type checks.
