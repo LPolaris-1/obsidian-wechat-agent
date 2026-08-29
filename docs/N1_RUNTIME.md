@@ -16,6 +16,13 @@ The runtime preparation on 2026-08-29 found:
 - The official FNS service is reachable on the existing server at `http://127.0.0.1:9000/api/mcp` (normally exposed to the workstation through an SSH tunnel). The discovered vault name is `defaultVault`.
 - A newly supplied, valid FNS token is scoped `p:rest,ws,mcp` for the `openclaw` client. Native OpenClaw `streamable-http` MCP initialization succeeded and discovered 26 server tools.
 - The isolated agent allowlist exposed only `image`, `fns__note_create_or_update` and `fns__note_get`. All destructive/file/vault tools were unavailable to the model.
+
+## N1-SKILL-VERIFY evidence
+
+- Wrong Question Skill discovery: PASS via the official `skills info wrong-question --agent main --json` command; source is `openclaw-workspace`, with `eligible: true` and `modelVisible: true`.
+- Skill path: `C:\\Users\\HUAWEI\\.openclaw\\workspace-n1\\skills\\wrong-question\\SKILL.md`.
+- Skill-triggered E2E: PASS. The runtime report included `wrong-question` in `skills.entries` and exposed only `image`, `fns__note_create_or_update`, and `fns__note_get`; the request used the explicit archive trigger and completed `fns__note_create_or_update` followed by `fns__note_get`.
+- Exact-path read-back: PASS for `Migration-Test/N1-Skill-Verify.md`; an independent `note_get` returned HTTP 200 and the expected title, error, and key-point sections.
 - Text E2E created `Migration-Test/N1-Text-Smoke.md`, then read the exact path back successfully. Image E2E read the synthetic PNG, created `Migration-Test/N1-Image-Smoke.md`, then read the exact path back successfully.
 
 Therefore N1 real integration is **PASS for the bounded smoke scope**. No REST client, custom MCP adapter, production write, or formal Vault write was introduced.

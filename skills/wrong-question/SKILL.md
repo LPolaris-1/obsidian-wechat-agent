@@ -1,3 +1,9 @@
+---
+name: wrong-question
+description: Validate and route explicitly requested wrong-question records through the isolated OpenClaw runtime boundary.
+user-invocable: false
+---
+
 # Wrong Question Skill v1
 
 ## Purpose
