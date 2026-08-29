@@ -22,6 +22,10 @@
 
 `questionId` 格式为 `WQ-HM01-XXXXXXXXXXXX` 或 `WQ-LA01-XXXXXXXXXXXX`，由 subject、chapterId 和简单空白归一化后的 question 计算 SHA-256 前 12 位大写十六进制。它是稳定短 identity，不声称数学绝对唯一；顺序显示编号仍 deferred。
 
+## N1 runtime hand-off
+
+在 N1 运行时，OpenClaw 负责会话、模型和 MCP 编排；本 Skill 只消费模型提供的结构化字段，调用 domain parser/validator，再生成 `WrongQuestionWritePlan`。FNS 写入必须由已注册的原生 MCP 工具执行，且仅允许用户明确授权的 `Migration-Test/` smoke 目标。Skill 不直接发 HTTP 请求、不读取凭据，也不把 `questionId`、Vault 路径或“我的错误”交给模型自由生成。
+
 ## Safety expectations
 
 路径拒绝 NUL、`..`、POSIX/Windows 绝对路径、URL scheme 和空路径；文件名会清理非法字符、trim、限长并提供 fallback。所有输出均为纯对象或字符串，便于 fixture 测试。

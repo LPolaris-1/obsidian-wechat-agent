@@ -16,6 +16,12 @@
 - G2 closeout 增加 stable `questionId`、chapter identity 消歧、碰撞安全文件名、严格 archive intent 与 renderer/template contract。
 - 本阶段不执行写入，不连接 DeepSeek、FNS、微信或服务器，不实现章节聚合、索引、统计和图片 OCR。
 
+## N1 当前状态
+
+- G2 PR #2 已 squash merge 到 `main`（`8ba00f774d7dc291f53484d1dd5c67dcc70c174b`）。
+- `feature/minimal-runtime-integration` 仅保留 runtime smoke 前置探针和联调说明；当前工作机未发现 stock OpenClaw 可执行文件，且未注入 FNS MCP 地址/令牌，因此 DeepSeek/FNS/E2E smoke 尚未运行。
+- 未修改生产配置、未连接微信、未写入真实 Vault；真实联调仍是手动且限定 `Migration-Test/`。
+
 ## 阶段边界
 
 G0 只创建骨架。Wrong Question Skill、Policy Plugin 业务规则、FNS Contract、图片流程、OpenClaw 集成和服务器部署属于 G1 及以后阶段。
