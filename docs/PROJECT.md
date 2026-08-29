@@ -1,0 +1,19 @@
+# 项目说明
+
+## 目标
+
+在保留 24 小时微信入口和 Obsidian 远程修改能力的前提下，使用 OpenClaw、Tencent WeChat Plugin、DeepSeek Vision 与 FNS MCP，替换旧项目中的自研通用基础设施。
+
+## G0 成功标准
+
+- 新仓库拥有可审查的目录、文档、示例配置和 CI 基础。
+- 不复制旧 `weixin-bridge` 的 Runtime、状态、数据或凭据。
+- 本地 `npm test` 与基础静态检查通过。
+
+## 阶段边界
+
+G0 只创建骨架。Wrong Question Skill、Policy Plugin 业务规则、FNS Contract、图片流程、OpenClaw 集成和服务器部署属于 G1 及以后阶段。
+
+## 发布原则
+
+使用语义化版本和 Release/Tag；生产不跟随 `main`，也不在服务器直接修改代码。

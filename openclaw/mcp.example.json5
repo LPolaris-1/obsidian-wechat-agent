@@ -1,0 +1,23 @@
+{
+  // Example MCP registration. Use a local/deployment secret store at runtime.
+  servers: {
+    fns: {
+      transport: "streamable-http",
+      urlEnv: "FNS_BASE_URL",
+      tokenEnv: "FNS_TOKEN",
+      allowedTools: [
+        "note_list",
+        "note_get",
+        "note_create_or_update",
+        "note_append",
+        "note_replace",
+        "note_patch_frontmatter",
+        "file_list",
+        "file_get_info",
+        "file_read",
+        "file_write",
+        "note_restore",
+      ],
+    },
+  },
+}

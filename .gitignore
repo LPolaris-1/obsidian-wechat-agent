@@ -1,0 +1,30 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.token
+*.key
+*.pem
+auth.json
+credentials.json
+
+# Dependencies and build output
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Runtime state and local-only OpenClaw data
+data/
+logs/
+.openclaw/
+.cache/
+
+# Local editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local fixture outputs
+tests/fixtures/**/output/

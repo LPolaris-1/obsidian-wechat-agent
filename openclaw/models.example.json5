@@ -1,0 +1,15 @@
+{
+  // Provider/model names are placeholders; no credentials are stored here.
+  providers: {
+    deepseek: {
+      baseUrlEnv: "DEEPSEEK_BASE_URL",
+      apiKeyEnv: "DEEPSEEK_API_KEY",
+      models: [
+        {
+          id: "deepseek-v4-flash-vision-exp",
+          modalities: ["text", "image"],
+        },
+      ],
+    },
+  },
+}

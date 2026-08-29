@@ -1,0 +1,13 @@
+{
+  // G0 example only. Fill local values outside version control.
+  gateway: {
+    bind: "127.0.0.1",
+    port: 0,
+    tokenEnv: "OPENCLAW_GATEWAY_TOKEN",
+  },
+  agent: {
+    name: "obsidian-wechat-agent",
+    skills: ["./skills/wrong-question", "./skills/schedule"],
+    policyPlugin: "./extensions/obsidian-policy",
+  },
+}

@@ -1,0 +1,8 @@
+{
+  "name": "@obsidian-wechat-agent/obsidian-policy",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "G0 skeleton for the Obsidian Policy OpenClaw plugin",
+  "main": "dist/index.js"
+}
