@@ -1,0 +1,13 @@
+{
+  "subject": "线代",
+  "chapter": "二次型",
+  "topic": "正定矩阵",
+  "problemType": "证明题",
+  "question": "虚构题目：判断一个二次型的正定性。",
+  "userError": "只检查了一个主子式。",
+  "errorReason": "没有按顺序检查全部顺序主子式。",
+  "correctSolution": "依次检查所有顺序主子式并据此判断。",
+  "keyPoint": "正定判别需要满足全部顺序主子式为正。",
+  "tags": ["二次型", "正定"],
+  "sourceImage": "attachments/wrong-question/example.png"
+}

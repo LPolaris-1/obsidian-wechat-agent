@@ -1,0 +1,12 @@
+{
+  "subject": "线代",
+  "chapter": "矩阵",
+  "topic": "矩阵乘法",
+  "problemType": "计算题",
+  "question": "虚构题：给定两个二阶矩阵，判断乘积是否可交换。",
+  "userError": "默认把 AB 写成 BA。",
+  "errorReason": "把数的乘法交换律误套到矩阵乘法。",
+  "correctSolution": "分别计算 AB 与 BA；一般情况下两者不相等。",
+  "keyPoint": "矩阵乘法通常不满足交换律。",
+  "tags": ["矩阵", "运算"]
+}

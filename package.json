@@ -5,8 +5,8 @@
   "description": "OpenClaw-based WeChat to Obsidian Agent project skeleton",
   "type": "module",
   "scripts": {
-    "test": "node --test",
-    "typecheck": "tsc --noEmit -p extensions/obsidian-policy/tsconfig.json",
+    "test": "node --import tsx --test",
+    "typecheck": "tsc -p tsconfig.json && tsc --noEmit -p extensions/obsidian-policy/tsconfig.json",
     "lint": "node --check scripts/smoke-model.mjs && node --check scripts/smoke-fns.mjs && node --check scripts/smoke-openclaw.mjs",
     "ci": "npm run typecheck && npm run lint && npm test"
   },
@@ -14,6 +14,7 @@
     "node": ">=20"
   },
   "devDependencies": {
+    "tsx": "^4.23.12",
     "typescript": "^5.9.3"
   }
 }

@@ -1,0 +1,12 @@
+{
+  "subject": "高数",
+  "chapter": "行列式",
+  "topic": "测试分类",
+  "problemType": "判断题",
+  "question": "虚构题目。",
+  "userError": "虚构错误。",
+  "errorReason": "虚构原因。",
+  "correctSolution": "虚构解法。",
+  "keyPoint": "虚构要点。",
+  "tags": ["测试"]
+}
