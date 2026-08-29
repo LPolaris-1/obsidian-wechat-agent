@@ -6,11 +6,14 @@
   "type": "module",
   "scripts": {
     "test": "node --test",
-    "typecheck": "node --check scripts/smoke-openclaw.mjs",
+    "typecheck": "tsc --noEmit -p extensions/obsidian-policy/tsconfig.json",
     "lint": "node --check scripts/smoke-model.mjs && node --check scripts/smoke-fns.mjs && node --check scripts/smoke-openclaw.mjs",
     "ci": "npm run typecheck && npm run lint && npm test"
   },
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
   }
 }
