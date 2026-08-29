@@ -13,6 +13,7 @@
 ## G2 当前状态
 
 - Wrong Question domain v1 已定义：结构化 schema、章节验证、`原档案/高数|线代` 路由、确定性 Markdown 与 write plan。
+- G2 closeout 增加 stable `questionId`、chapter identity 消歧、碰撞安全文件名、严格 archive intent 与 renderer/template contract。
 - 本阶段不执行写入，不连接 DeepSeek、FNS、微信或服务器，不实现章节聚合、索引、统计和图片 OCR。
 
 ## 阶段边界

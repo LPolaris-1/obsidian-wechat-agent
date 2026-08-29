@@ -7,20 +7,25 @@ export const LINEAR_ALGEBRA_ARCHIVE = `${WRONG_QUESTION_ROOT}/线代`;
 
 const ILLEGAL_FILENAME = /[<>:"/\\|?*\u0000-\u001f]/g;
 const MAX_FILENAME_LENGTH = 100;
+const RESERVED_DEVICE = /^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\..*)?$/i;
 
 export function archiveRootFor(subject: Subject): string {
   return subject === "高数" ? HIGH_MATH_ARCHIVE : LINEAR_ALGEBRA_ARCHIVE;
 }
 
 export function sanitizeFilename(value: string, fallback = "未命名错题"): string {
-  const cleaned = value.replace(ILLEGAL_FILENAME, "-").replace(/\s+/g, " ").trim().replace(/[. ]+$/g, "");
-  const safe = cleaned && cleaned !== "." && cleaned !== ".." ? cleaned : fallback;
-  return Array.from(safe).slice(0, MAX_FILENAME_LENGTH).join("") || fallback;
+  const cleaned = value.replace(ILLEGAL_FILENAME, "-").replace(/\s+/g, " ").trim();
+  let safe = Array.from(cleaned).slice(0, MAX_FILENAME_LENGTH).join("").replace(/[. ]+$/g, "");
+  if (!safe || safe === "." || safe === ".." || RESERVED_DEVICE.test(safe)) safe = fallback;
+  return safe;
 }
 
 export function resolveWrongQuestionTarget(question: ValidatedWrongQuestion): string {
-  const title = sanitizeFilename(`${question.topic}-${question.problemType}`);
-  return `${archiveRootFor(question.subject)}/${title}.md`;
+  const prefix = `${question.questionId}-`;
+  const suffix = sanitizeFilename(`${question.topic}-${question.problemType}`);
+  const available = Math.max(1, MAX_FILENAME_LENGTH - Array.from(prefix).length);
+  const readable = Array.from(suffix).slice(0, available).join("").replace(/[. ]+$/g, "") || "未命名错题";
+  return `${archiveRootFor(question.subject)}/${prefix}${readable}.md`;
 }
 
 export function validateSourceImageReference(reference: string): string {

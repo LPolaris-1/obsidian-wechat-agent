@@ -3,6 +3,10 @@ export type Subject = "高数" | "线代";
 export interface RawWrongQuestionInput {
   subject?: unknown;
   chapter?: unknown;
+  chapterId?: unknown;
+  chapter_id?: unknown;
+  chapterNumber?: unknown;
+  chapter_number?: unknown;
   topic?: unknown;
   problemType?: unknown;
   problem_type?: unknown;
@@ -22,7 +26,10 @@ export interface RawWrongQuestionInput {
 
 export interface ValidatedWrongQuestion {
   readonly subject: Subject;
+  readonly chapterId: string;
+  readonly chapterNumber: number;
   readonly chapter: string;
+  readonly questionId: string;
   readonly topic: string;
   readonly problemType: string;
   readonly question: string;
@@ -37,6 +44,7 @@ export interface ValidatedWrongQuestion {
 export type ArchiveIntent = { readonly archive: true } | { readonly archive: false };
 
 export interface WrongQuestionWritePlan {
+  readonly questionId: string;
   readonly targetPath: string;
   readonly markdown: string;
   readonly attachment?: { readonly sourceReference: string };

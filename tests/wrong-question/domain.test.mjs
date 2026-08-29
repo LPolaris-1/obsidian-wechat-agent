@@ -8,6 +8,7 @@ import {
   buildWrongQuestionWritePlan,
   parseWrongQuestion,
   renderWrongQuestionMarkdown,
+  resolveChapter,
   resolveWrongQuestionTarget,
   sanitizeFilename,
   validateSourceImageReference,
@@ -90,7 +91,8 @@ test("renderer is deterministic and write plan contains no side effects", () => 
   const second = buildWrongQuestionWritePlan(value, { archive: true });
   assert.deepEqual(first, second);
   assert.equal(first.attachment, undefined);
-  assert.equal(first.targetPath, "06-Resources/学习/考研/考研数学/错题本/原档案/高数/左右极限-概念判断.md");
+  assert.equal(first.questionId, value.questionId);
+  assert.equal(first.targetPath, `06-Resources/学习/考研/考研数学/错题本/原档案/高数/${value.questionId}-左右极限-概念判断.md`);
 });
 
 test("does not build a write plan without explicit archive intent", () => {
@@ -104,4 +106,81 @@ test("taxonomy preserves the G1 counts and names", () => {
   assert.equal(CHAPTERS.length, 24);
   assert.equal(HIGH_MATH_CHAPTERS[9], "应用(一)几何应用");
   assert.equal(LINEAR_ALGEBRA_CHAPTERS[0], "行列式");
+});
+
+test("questionId has stable canonical format", () => {
+  const value = parseWrongQuestion(validHigh);
+  assert.match(value.questionId, /^WQ-HM01-[A-F0-9]{12}$/);
+  assert.equal(value.chapterId, "high-math-01");
+  assert.equal(value.chapterNumber, 1);
+});
+
+test("question normalization keeps identity across whitespace variants", () => {
+  const a = parseWrongQuestion({ ...validHigh, question: "  x + 1\r\n= 2  " });
+  const b = parseWrongQuestion({ ...validHigh, question: "x + 1 = 2" });
+  assert.equal(a.questionId, b.questionId);
+});
+
+test("different substantive questions get different identities and paths", () => {
+  const a = parseWrongQuestion(validHigh);
+  const b = parseWrongQuestion({ ...validHigh, question: validHigh.question.replace("2 和 3", "2 和 4") });
+  assert.notEqual(a.questionId, b.questionId);
+  assert.notEqual(resolveWrongQuestionTarget(a), resolveWrongQuestionTarget(b));
+});
+
+test("chapterId and chapterNumber resolve duplicate display names", () => {
+  const byId = parseWrongQuestion({ ...validHigh, chapter: "应用(一)几何应用", chapterId: "high-math-05" });
+  const byNumber = parseWrongQuestion({ ...validHigh, chapter: undefined, chapterNumber: 10 });
+  assert.equal(byId.chapterId, "high-math-05");
+  assert.equal(byNumber.chapterId, "high-math-10");
+});
+
+test("duplicate chapter display name without identity is ambiguous", () => {
+  assert.throws(() => parseWrongQuestion({ ...validHigh, chapter: "应用(一)几何应用" }), /AMBIGUOUS CHAPTER/);
+});
+
+test("inconsistent chapter identity fields fail", () => {
+  assert.throws(() => parseWrongQuestion({ ...validHigh, chapterId: "high-math-05", chapterNumber: 10 }), /不一致/);
+  assert.throws(() => resolveChapter("高数", { chapterId: "high-math-05", chapter: "二重积分" }), /不一致/);
+});
+
+test("filename identity prevents topic/type collisions", () => {
+  const a = parseWrongQuestion(validHigh);
+  const b = parseWrongQuestion({ ...validHigh, question: "另一道完全不同的虚构题目" });
+  assert.ok(resolveWrongQuestionTarget(a).includes(a.questionId));
+  assert.ok(resolveWrongQuestionTarget(b).includes(b.questionId));
+  assert.notEqual(resolveWrongQuestionTarget(a), resolveWrongQuestionTarget(b));
+});
+
+test("Windows reserved device names are rejected case-insensitively", () => {
+  for (const name of ["CON", "con", "CON.txt", "PRN", "AUX", "NUL", "COM1", "LPT9"]) {
+    assert.equal(sanitizeFilename(name), "未命名错题");
+  }
+});
+
+test("truncation is followed by trailing dot/space cleanup", () => {
+  const result = sanitizeFilename("x".repeat(99) + " .");
+  assert.ok(result.length <= 100);
+  assert.doesNotMatch(result, /[. ]$/);
+});
+
+test("archive intent is strict at the runtime boundary", () => {
+  const value = parseWrongQuestion(validHigh);
+  for (const invalid of [{ archive: "true" }, { archive: 1 }, {}, null]) {
+    assert.throws(() => buildWrongQuestionWritePlan(value, invalid), /明确要求/);
+  }
+  assert.equal(buildWrongQuestionWritePlan(value, { archive: true }).questionId, value.questionId);
+});
+
+test("template documents the renderer contract", async () => {
+  const template = await readFile(new URL("../../skills/wrong-question/templates/wrong-question.md", import.meta.url), "utf8");
+  for (const key of ["type:", "id:", "subject:", "chapter_id:", "chapter_number:", "chapter:", "topic:", "tags:"]) assert.match(template, new RegExp(key));
+  for (const heading of ["## 题目", "## 我的错误", "## 错误原因", "## 正确思路", "## 关键点", "## 分类"]) assert.match(template, new RegExp(heading));
+});
+
+test("renderer quotes YAML-sensitive metadata and deduplicates tags", () => {
+  const value = parseWrongQuestion({ ...validHigh, topic: "极限: #边界", tags: ["错题", "高数", "极限", "极限"] });
+  const markdown = renderWrongQuestionMarkdown(value);
+  assert.equal((markdown.match(/  - "错题"/g) ?? []).length, 1);
+  assert.match(markdown, /topic: "极限: #边界"/);
 });

@@ -15,7 +15,10 @@ export function renderWrongQuestionMarkdown(question: ValidatedWrongQuestion): s
   return [
     "---",
     "type: wrong-question",
+    `id: ${yaml(question.questionId)}`,
     `subject: ${yaml(question.subject)}`,
+    `chapter_id: ${yaml(question.chapterId)}`,
+    `chapter_number: ${question.chapterNumber}`,
     `chapter: ${yaml(question.chapter)}`,
     `topic: ${yaml(question.topic)}`,
     "tags:",
@@ -46,8 +49,10 @@ export function renderWrongQuestionMarkdown(question: ValidatedWrongQuestion): s
     "",
     "## 分类",
     "",
+    `- 编号：${question.questionId}`,
     `- 科目：${question.subject}`,
     `- 章节：${question.chapter}`,
+    `- 章节编号：${question.chapterNumber}`,
     `- 知识点：${question.topic}`,
     `- 题型：${question.problemType}`,
     `- 标签：${tags.join("、")}`,
@@ -56,9 +61,10 @@ export function renderWrongQuestionMarkdown(question: ValidatedWrongQuestion): s
 }
 
 export function buildWrongQuestionWritePlan(question: ValidatedWrongQuestion, intent: ArchiveIntent): WrongQuestionWritePlan {
-  if (!intent.archive) throw new Error("用户未明确要求收录错题");
+  if (intent?.archive !== true) throw new Error("用户未明确要求收录错题");
   const markdown = renderWrongQuestionMarkdown(question);
   return {
+    questionId: question.questionId,
     targetPath: resolveWrongQuestionTarget(question),
     markdown,
     ...(question.sourceImage ? { attachment: { sourceReference: question.sourceImage } } : {}),

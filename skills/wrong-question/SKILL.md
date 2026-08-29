@@ -2,7 +2,7 @@
 
 ## Purpose
 
-将用户明确要求收录的一道数学错题转换为经过校验的结构化对象和确定性 `WrongQuestionWritePlan`。本版本只提供离线业务 domain logic，不执行文件写入。
+将用户明确要求收录的一道数学错题转换为经过校验的结构化对象和确定性 `WrongQuestionWritePlan`。每道题通过 `questionId` 获得稳定 domain identity；本版本只提供离线业务 domain logic，不执行文件写入。
 
 ## Trigger
 
@@ -18,7 +18,9 @@
 
 ## Output contract
 
-`parseWrongQuestion()` 返回 `ValidatedWrongQuestion`；`buildWrongQuestionWritePlan()` 再生成 `targetPath`、确定性 Markdown 和可选附件引用。Markdown 包含稳定 frontmatter、题目、我的错误、错误原因、正确思路、关键点和分类段落。
+`parseWrongQuestion()` 返回 `ValidatedWrongQuestion`（含 `chapterId`、`chapterNumber`、`questionId`）；`buildWrongQuestionWritePlan()` 再生成 `targetPath`、确定性 Markdown 和可选附件引用。Markdown 包含稳定 frontmatter、题目、我的错误、错误原因、正确思路、关键点和分类段落。未知 top-level 字段会被忽略，只有明确允许字段进入 validated object。
+
+`questionId` 格式为 `WQ-HM01-XXXXXXXXXXXX` 或 `WQ-LA01-XXXXXXXXXXXX`，由 subject、chapterId 和简单空白归一化后的 question 计算 SHA-256 前 12 位大写十六进制。它是稳定短 identity，不声称数学绝对唯一；顺序显示编号仍 deferred。
 
 ## Safety expectations
 
@@ -30,3 +32,4 @@
 - 不自行构造任意 Vault 路径，不执行删除、移动或永久删除。
 - 不实现章节聚合、统计、索引写入、图片 OCR、AES/CDN 或旧 iLink runtime。
 - 未经用户明确归档意图，不生成写入计划。
+- `archive` 必须在 runtime 中严格等于 `true`；字符串或数字 truthy 值都拒绝。

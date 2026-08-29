@@ -1,4 +1,6 @@
-import { assertChapter, validateSourceImageReference } from "./routing.js";
+import { resolveChapter } from "./chapters.js";
+import { validateSourceImageReference } from "./routing.js";
+import { buildWrongQuestionId } from "./identity.js";
 import type { RawWrongQuestionInput, Subject, ValidatedWrongQuestion } from "./types.js";
 
 const MAX = { question: 12000, normal: 4000, tag: 64 } as const;
@@ -30,8 +32,11 @@ export function parseWrongQuestion(input: unknown): ValidatedWrongQuestion {
   if (!input || typeof input !== "object" || Array.isArray(input)) throw new Error("错题输入必须是对象");
   const raw = input as RawWrongQuestionInput;
   const parsedSubject = subject(raw.subject);
-  const chapter = text(raw.chapter, "chapter", MAX.normal);
-  assertChapter(parsedSubject, chapter);
+  const chapterInfo = resolveChapter(parsedSubject, {
+    chapterId: raw.chapterId ?? raw.chapter_id,
+    chapterNumber: raw.chapterNumber ?? raw.chapter_number,
+    chapter: raw.chapter,
+  });
   const topic = raw.topic === undefined || raw.topic === null || (typeof raw.topic === "string" && !raw.topic.trim())
     ? TOPIC_FALLBACK
     : text(raw.topic, "topic", MAX.normal);
@@ -48,7 +53,10 @@ export function parseWrongQuestion(input: unknown): ValidatedWrongQuestion {
   const image = optionalText(alias(raw, "sourceImage", "source_image"), "sourceImage", MAX.normal);
   return {
     subject: parsedSubject,
-    chapter,
+    chapterId: chapterInfo.id,
+    chapterNumber: chapterInfo.number,
+    chapter: chapterInfo.name,
+    questionId: buildWrongQuestionId(parsedSubject, chapterInfo.id, question),
     topic,
     problemType,
     question,

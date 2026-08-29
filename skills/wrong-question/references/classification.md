@@ -10,3 +10,5 @@
 - `keyPoint`：以后复习时应快速记住的关键点。
 - `tags`：非空字符串数组，最多 20 项；渲染时与 `错题`、科目标签去重。
 - `sourceImage`：可选的 Vault-relative attachment reference，不包含传输协议或加密字段。
+- `chapterId` / `chapterNumber`：章节的 canonical identity；display name 重复时必须提供其中之一。
+- `questionId`：由科目、章节 identity 和归一化题目生成的稳定短 identity；不依赖错误分析字段、时间或存储状态。

@@ -2,6 +2,8 @@
 
 以下名称忠实保留 G1 提取的旧业务 taxonomy，包括重复的“应用”命名；G2 不重新设计教学体系。
 
+代码中的 canonical id 按顺序为 `high-math-01`…`high-math-18` 与 `linear-algebra-01`…`linear-algebra-06`；display name 重复时必须使用 id 或 chapter number 消歧。
+
 ## 高数（18 讲）
 
 1. 函数极限与连续
