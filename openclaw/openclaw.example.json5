@@ -1,13 +1,52 @@
 {
-  // G0 example only. Fill local values outside version control.
+  // Production-shape fragment. Merge with the other examples. The private
+  // production config also has gateway.auth.token; its value is omitted.
   gateway: {
-    bind: "127.0.0.1",
-    port: 0,
-    tokenEnv: "OPENCLAW_GATEWAY_TOKEN",
+    mode: "local",
+    auth: { mode: "token" },
   },
-  agent: {
-    name: "obsidian-wechat-agent",
-    skills: ["./skills/wrong-question", "./skills/schedule"],
-    policyPlugin: "./extensions/obsidian-policy",
+  agents: {
+    defaults: {
+      model: { primary: "deepseek/deepseek-flash" },
+      timeoutSeconds: 900,
+    },
+    list: [{
+      id: "main",
+      tools: {
+        allow: [
+          "image",
+          "fns__file_get_info",
+          "fns__file_list",
+          "fns__file_read",
+          "fns__file_write",
+          "fns__note_append",
+          "fns__note_create_or_update",
+          "fns__note_get",
+          "fns__note_get_backlinks",
+          "fns__note_get_outlinks",
+          "fns__note_list",
+          "fns__note_patch_frontmatter",
+          "fns__note_prepend",
+          "fns__note_replace",
+          "fns__vault_list",
+          "web_search",
+          "web_fetch",
+        ],
+      },
+    }],
   },
+  tools: {
+    profile: "coding",
+    web: {
+      search: { enabled: true, provider: "duckduckgo" },
+      fetch: { enabled: true },
+    },
+  },
+  plugins: {
+    entries: {
+      "openclaw-weixin": { enabled: true },
+      deepseek: { enabled: true },
+    },
+  },
+  session: { dmScope: "per-channel-peer" },
 }

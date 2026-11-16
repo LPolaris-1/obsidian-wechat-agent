@@ -1,15 +1,19 @@
 {
-  // Provider/model names are placeholders; no credentials are stored here.
-  providers: {
-    deepseek: {
-      baseUrlEnv: "DEEPSEEK_BASE_URL",
-      apiKeyEnv: "DEEPSEEK_API_KEY",
-      models: [
-        {
-          id: "deepseek-v4-flash-vision-exp",
-          modalities: ["text", "image"],
-        },
-      ],
+  // Production-shape fragment. The private production provider also has
+  // baseUrl and apiKey fields; their values are omitted.
+  models: {
+    mode: "merge",
+    providers: {
+      deepseek: {
+        api: "openai-completions",
+        auth: "api-key",
+        timeoutSeconds: 300,
+        models: [{
+          id: "deepseek-flash",
+          name: "deepseek-flash",
+          input: ["text", "image"],
+        }],
+      },
     },
   },
 }

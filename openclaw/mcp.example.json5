@@ -1,17 +1,30 @@
 {
-  // OpenClaw 2026.7.1-2 shape. Generate a local copy and inject the
-  // credential there; never commit a real token or endpoint credential.
+  // Production-shape fragment. The private production config also has
+  // headers.Token; its value is omitted.
   mcp: {
     servers: {
       fns: {
         transport: "streamable-http",
-        // The deployed FNS service is reached through a local SSH tunnel.
-        // Keep the concrete local port in the ignored runtime config only.
-        url: "http://127.0.0.1:19000/api/mcp",
-        // Add the scoped MCP credential only in the local runtime config.
-        // headers: { Token: "<runtime-injected>" },
+        url: "http://127.0.0.1:9000/api/mcp",
+        connectTimeout: 30,
+        requestTimeoutMs: 120000,
         toolFilter: {
-          include: ["note_list", "note_get", "note_create_or_update"],
+          include: [
+            "file_get_info",
+            "file_list",
+            "file_read",
+            "file_write",
+            "note_append",
+            "note_create_or_update",
+            "note_get",
+            "note_get_backlinks",
+            "note_get_outlinks",
+            "note_list",
+            "note_patch_frontmatter",
+            "note_prepend",
+            "note_replace",
+            "vault_list",
+          ],
         },
       },
     },
