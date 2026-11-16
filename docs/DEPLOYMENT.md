@@ -1,8 +1,8 @@
 # 部署约定
 
-G0 不执行部署，也不连接生产服务器。
+G0 阶段不执行部署，也不连接生产服务器。
 
-生产部署的前置条件是 Release Candidate 通过 CI、安全测试、Skill fixture 和人工 smoke。服务器只拉明确的 Release/Tag，不直接跟随 `main`。
+G0 原定生产部署约定：Release Candidate 通过 CI、安全测试、Skill fixture 和人工 smoke 后，服务器只拉明确的 Release/Tag，不直接跟随 `main`。这不是已验证的当前部署方式；截至 2026-11-16 的服务器实测状态见 [生产运行快照](PRODUCTION_RUNTIME.md)。
 
 ## 预期流程
 
