@@ -1,0 +1,19 @@
+{
+  "id": "wrong-question-tool",
+  "name": "Wrong Question Tool",
+  "description": "Validate wrong-question input and return a write plan without touching files or the network.",
+  "version": "0.1.0",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  },
+  "activation": {
+    "onStartup": true
+  },
+  "contracts": {
+    "tools": [
+      "wrong_question_plan"
+    ]
+  }
+}

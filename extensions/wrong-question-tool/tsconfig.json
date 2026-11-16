@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "rootDir": "../..",
+    "outDir": "dist",
+    "declaration": false,
+    "noEmitOnError": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "../../skills/wrong-question/src/index.ts"
+  ]
+}
