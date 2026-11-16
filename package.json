@@ -8,7 +8,9 @@
     "test": "node --import tsx --test",
     "typecheck": "tsc -p tsconfig.json && tsc --noEmit -p extensions/obsidian-policy/tsconfig.json",
     "lint": "node --check scripts/smoke-model.mjs && node --check scripts/smoke-fns.mjs && node --check scripts/smoke-openclaw.mjs",
-    "ci": "npm run typecheck && npm run lint && npm test"
+    "ci:wrong-question-deps": "npm --prefix extensions/wrong-question-tool ci --ignore-scripts",
+    "build:wrong-question": "tsc -p skills/wrong-question/tsconfig.build.json && npm --prefix extensions/wrong-question-tool run build",
+    "ci": "npm run ci:wrong-question-deps && npm run typecheck && npm run lint && npm run build:wrong-question && npm test"
   },
   "engines": {
     "node": ">=20"
